@@ -1,3 +1,6 @@
+import './bootstrap';
+import './script.js';
+import './dashboard.js';
 
 
 import Alpine from 'alpinejs';
