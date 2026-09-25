@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\AdminLoginController;
+use App\Http\Controllers\Admin\Auth\AdminPasswordResetController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PricingController as AdminPricingController;
@@ -20,6 +22,14 @@ Route::get('/services/{service}', [ServicesController::class, 'show'])->name('se
 Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+
+// Admin Authentication Routes (Guest only - separate from customer login)
+Route::middleware('guest')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminLoginController::class, 'login']);
+    Route::get('/password/reset', [AdminPasswordResetController::class, 'showResetForm'])->name('password.request');
+    Route::post('/password/reset', [AdminPasswordResetController::class, 'reset'])->name('password.update');
+});
 
 // Customer Authenticated Routes
 Route::middleware(['auth'])->group(function () {
